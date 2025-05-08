@@ -93,10 +93,12 @@ CREATE TABLE IF NOT EXISTS absences (
     id INT AUTO_INCREMENT PRIMARY KEY,
     etudiant_id INT NOT NULL,
     seance_id INT NOT NULL,
+    module_id INT NOT NULL,  -- Colonne ajoutée
     justifiee BOOLEAN DEFAULT FALSE,
     date_enregistrement TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (etudiant_id) REFERENCES etudiants(id) ON DELETE CASCADE,
     FOREIGN KEY (seance_id) REFERENCES seances(id) ON DELETE CASCADE,
+    FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE,  -- Contrainte ajoutée
     UNIQUE KEY (etudiant_id, seance_id)
 );
 
@@ -253,11 +255,11 @@ INSERT INTO seances (module_id, date_seance, heure_debut, heure_fin, type_seance
 (13, '2024-10-19', '08:30:00', '10:30:00', 'TP', 'Salle C1');
 
 -- Enregistrement de quelques absences
-INSERT INTO absences (etudiant_id, seance_id, justifiee) VALUES
-(1, 2, FALSE), -- Mohammed Alaoui absent au 2ème cours de Programmation Web
-(1, 5, TRUE),  -- Mohammed Alaoui absent au 2ème TD de Programmation Web (justifiée)
-(2, 8, FALSE), -- Fatima Berrada absente au 2ème cours de Bases de Données
-(3, 14, FALSE); -- Younes Chraibi absent au 2ème cours de Sécurité Réseaux
+INSERT INTO absences (etudiant_id, seance_id, module_id, justifiee) VALUES
+(1, 2, 1, FALSE),  -- Séance 2 → module 1 (GI101)
+(1, 5, 1, TRUE),   -- Séance 5 → module 1
+(2, 8, 2, FALSE),  -- Séance 8 → module 2 (GI102)
+(3, 14, 13, FALSE);-- Séance 14 → module 13 (RSSP101)
 
 -- Ajout de justificatifs pour certaines absences
 INSERT INTO justificatifs (absence_id, fichier, statut, commentaire) VALUES
